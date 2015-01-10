@@ -12,20 +12,39 @@ import javax.validation.*;
 import views.html.*;
 import java.util.*;
 
-
+//v1: how to create a structure from the dictionary
+//v2: structure obtained from the form that will mimic the dictionary
 public class Data extends Controller {
 
     //static Form<User> userForm = form(User.class);
     static Form<User> userForm = Form.form(User.class);
     //The underlying binding is done using Spring data binder
     public static Result test(){
-        Map<String,String> toBind = new HashMap<String,String>();
+        
+        //v1
+        //Map<String,String> toBind = new HashMap<String,String>();
         //Map<String,String> toBind = new HashMap(); //warn uses unchecked or unsafe operations.
-        toBind.put("name","Arturo"); //la primera key tiene que coincidir con la variable de la Clase
+        //toBind.put("name","Arturo"); //la primera key tiene que coincidir con la variable de la Clase
 
-        User user = userForm.bind(toBind).get();
+        //User user = userForm.bind(toBind).get();
         //https://www.playframework.com/documentation/2.2.x/JavaForms
-        return ok(data.render(user));
+        //return ok(data.render(user));
+        //v2
+        return ok(data.render(Scala.Option(((User) null ))));
 
+    }
+
+
+    public static Result post() {
+        User user = userForm.bindFromRequest().get();
+        //bindFromRequest: retrieve the data needed by the form somewhere in the request
+        //The query string: This is our case, because we have sent a GET request.
+        //The body: For POST/PUT methods. There are several options here because the 
+        //content could be a map of URL parameters, a multipart, or JSON encoded.
+        //it returns a Form instance filled with these values on
+        //which we may call get in order to retrieve the related domain object. But, we could
+        //also call the data method that would give us back the dictionary of values.
+        
+        return ok(data.render(Scala.Option(user)));
     }
 }

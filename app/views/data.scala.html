@@ -1,4 +1,16 @@
-@(user: User)
+@(user: Option[User])
 @main("Testing User class"){
-	<h1>@user.name</h1>
+	@if(user.isDefined){
+
+		<h1>@user.get.name</h1>
+	} else{
+		<h1>Feed user name</h1>
+		
+		<form method="GET" action="/data/post" >
+			<input type="text" name="name"/>
+			<input type="submit" name="send" value="Feed"/>
+		</form>
+	}
+
+
 }
